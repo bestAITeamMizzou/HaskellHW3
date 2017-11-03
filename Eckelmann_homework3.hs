@@ -1,10 +1,16 @@
 {-# OPTIONS_GHC -fwarn-missing-signatures #-}
 {-# OPTIONS_GHC -fno-warn-tabs #-}
+--{-# LANGUAGE DeriveFoldable #-}
+--{-# LANGUAGE DeriveFunctor #-}
+--{-# LANGUAGE DeriveTraversable #-}
+--{-# LANGUAGE FlexibleInstances #-}
+--{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+--{-# LANGUAGE LambdaCase #-}
+
 module Homework3 where
 
 import Test.Hspec
 import RPNAST
-
 
 prob1    :: a
 prob1    = undefined
@@ -19,3 +25,18 @@ prob4    :: a
 prob4    = undefined
 
 -- Write your Hspec Tests below
+
+test_probs :: IO()
+test_probs = undefined
+
+test_prob1 :: IO()
+test_prob1 = undefined
+
+test_prob2 :: IO()
+test_prob2 = undefined
+
+test_prob3 :: IO()
+test_prob3 = undefined
+
+test_prob4 :: IO()
+test_prob4 = undefined

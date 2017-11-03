@@ -27,7 +27,11 @@ prob4    = undefined
 -- Write your Hspec Tests below
 
 test_probs :: IO()
-test_probs = undefined
+test_probs = do
+  test_prob1
+  test_prob2
+  test_prob3
+  test_prob4
 
 test_prob1 :: IO()
 test_prob1 = undefined

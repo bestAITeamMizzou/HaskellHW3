@@ -18,7 +18,7 @@ prob1    = undefined
 prob2    :: PExp -> Int
 prob2    = undefined
 
-prob3    :: PExp -> Result a b
+prob3    :: PExp -> Result String Int
 prob3    = undefined
 
 prob4    :: PExp -> Result String String
@@ -54,8 +54,18 @@ test_prob2 = hspec $ do
         prob2 [Val 4, Val 0, IntDiv] `shouldThrow` errorCall "Cannot divide by zero!"-}
 		
 test_prob3 :: IO()
-test_prob3 = undefined
-
+test_prob3 = hspec $ do
+  describe "prob2(evaluation)" $ do
+    context "when provided with valid input" $ do
+      it "returns a Int" $ do
+        prob3 [Val 4, Val 2, IntDiv] `shouldBe` Success 2
+    context "when provided with syntactically incorrect input" $ do
+      it "throws an error" $ do
+        prob3 [Mul] `shouldBe` Failure "Bad Input."
+    context "when provided with syntactically incorrect input" $ do
+      it "throws an error" $ do
+        prob3 [Mul] `shouldBe` Failure "Cannot divide by zero!"
+        
 test_prob4 :: IO()
 test_prob4 = undefined hspec $ do
   describe "prob4(infix converter)" $ do

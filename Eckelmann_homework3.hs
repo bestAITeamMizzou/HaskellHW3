@@ -21,7 +21,7 @@ prob2    = undefined
 prob3    :: PExp -> Result a b
 prob3    = undefined
 
-prob4    :: PExp -> String
+prob4    :: PExp -> Result String String
 prob4    = undefined
 
 -- Write your Hspec Tests below
@@ -46,15 +46,26 @@ test_prob2 = hspec $ do
     context "when provided with valid input" $ do
       it "returns a Int" $ do
         prob2 [Val 4, Val 2, IntDiv] `shouldBe` 2
-    context "when provided with syntactically incorrect input" $ do
+{-   context "when provided with syntactically incorrect input" $ do
       it "throws an error" $ do
         prob2 [Mul] `shouldThrow` errorCall "Bad Input."
-    context "when provided with syntactically incorrect input" $ do
+    context "when provided with an expression that tries to divide by 0" $ do
       it "throws an error" $ do
-        prob2 [Mul] `shouldThrow` errorCall "Cannot divide by zero!"
+        prob2 [Val 4, Val 0, IntDiv] `shouldThrow` errorCall "Cannot divide by zero!"-}
 		
 test_prob3 :: IO()
 test_prob3 = undefined
 
 test_prob4 :: IO()
-test_prob4 = undefined
+test_prob4 = undefined hspec $ do
+  describe "prob4(infix converter)" $ do
+    context "When provided with valid input" $ do
+      it "returns an infix string." $ do
+        prob4 [Val 1, Val 1, Plus] `shouldBe` Success "(1 + 1)"
+      it "returns an infix string." $ do
+        prob4 [Val 2, Val 4, Plus, Val 3, IntDiv] `shouldBe` Success "((2 + 4) / 3)"
+      it "returns an infix string." $ do
+        prob4 [Val 2] `shouldBe` Success "2"
+    context "When provided with an invalid expression" $ do
+      it "returns Failure" $ do
+        prob4 [Plus] `shouldBe` Failure "Bad Input."

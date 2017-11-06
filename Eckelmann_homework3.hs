@@ -10,8 +10,12 @@
 module Homework3 where
 
 import Test.Hspec
+import Control.Exception (evaluate)
 import RPNAST
 
+
+--words prelude function breaks a string up by spaces
+--tokenizing is "lexing"
 prob1    :: String -> PExp
 prob1    = undefined
 
@@ -46,12 +50,12 @@ test_prob2 = hspec $ do
     context "when provided with valid input" $ do
       it "returns a Int" $ do
         prob2 [Val 4, Val 2, IntDiv] `shouldBe` 2
-{-   context "when provided with syntactically incorrect input" $ do
+   context "when provided with syntactically incorrect input" $ do
       it "throws an error" $ do
         prob2 [Mul] `shouldThrow` errorCall "Bad Input."
     context "when provided with an expression that tries to divide by 0" $ do
       it "throws an error" $ do
-        prob2 [Val 4, Val 0, IntDiv] `shouldThrow` errorCall "Cannot divide by zero!"-}
+        prob2 [Val 4, Val 0, IntDiv] `shouldThrow` errorCall "Cannot divide by zero!"
 		
 test_prob3 :: IO()
 test_prob3 = hspec $ do

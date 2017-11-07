@@ -43,20 +43,20 @@ test_prob1 = hspec $ do
     context "when provided with invalid input" $ do
       it "returns a PExp" $ do
         prob1 "200 + - * /" `shouldBe` [Val 200, Plus, Minus, Mul, IntDiv]
-
+        
 test_prob2 :: IO()
 test_prob2 = hspec $ do
   describe "prob2(evaluation)" $ do
     context "when provided with valid input" $ do
       it "returns a Int" $ do
         prob2 [Val 4, Val 2, IntDiv] `shouldBe` 2
-   context "when provided with syntactically incorrect input" $ do
+    context "when provided with syntactically incorrect input" $ do
       it "throws an error" $ do
-        prob2 [Mul] `shouldThrow` errorCall "Bad Input."
+        evaluate (prob2 [Mul]) `shouldThrow` errorCall "Bad Input."
     context "when provided with an expression that tries to divide by 0" $ do
       it "throws an error" $ do
-        prob2 [Val 4, Val 0, IntDiv] `shouldThrow` errorCall "Cannot divide by zero!"
-		
+        evaluate(prob2 [Val 4, Val 0, IntDiv]) `shouldThrow` errorCall "Cannot divide by zero!"
+        
 test_prob3 :: IO()
 test_prob3 = hspec $ do
   describe "prob2(evaluation)" $ do

@@ -16,8 +16,8 @@ import RPNAST
 
 --words prelude function breaks a string up by spaces
 --tokenizing is "lexing"
-prob1    :: String -> PExp
-prob1 x =  (prob1_helper(words(x)))
+prob1   :: String -> PExp
+prob1 x = (prob1_helper(words(x)))
 
 prob1_helper :: [String] -> [Op]
 prob1_helper [] = []
@@ -29,7 +29,29 @@ prob1_helper (x:xs)
   | otherwise  = (Val (read x :: Int)) : prob1_helper(xs)
 
 prob2    :: PExp -> Int
-prob2    = undefined
+prob2 x
+  | length x < 3 = error("Bad Input.")
+prob2 x = prob2_helper [] x
+{-
+prob2 ((Val x):xs) = Plus
+prob2 (Plus:xs)    = Plus
+prob2 (Minus:xs)   = Minus
+prob2 (Mul:xs)     = Mul
+prob2 (IntDiv:xs)  = IntDiv
+--}
+
+--{-
+prob2_helper :: [Int] -> PExp -> Int
+prob2_helper (y:[]) []            = y
+prob2_helper _ []                 = error("Bad Input.")
+prob2_helper y ((Val x):xs)       = prob2_helper (x : y) xs
+prob2_helper (y:z:zs) (Plus:xs)   = prob2_helper ((z + y):zs) xs
+prob2_helper (y:z:zs) (Minus:xs)  = prob2_helper ((z - y):zs) xs
+prob2_helper (y:z:zs) (Mul:xs)    = prob2_helper ((z * y):zs) xs
+prob2_helper (y:z:zs) (IntDiv:xs)
+  | y == 0 = error("Cannot divide by zero!")
+  | otherwise = prob2_helper ((z `div` y):zs) xs
+prob2_helper _ _                  = error("Bad Input.")
 
 prob3    :: PExp -> Result String Int
 prob3    = undefined

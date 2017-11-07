@@ -26,7 +26,7 @@ prob1_helper (x:xs)
   | x == "-"    = Minus : prob1_helper(xs)
   | x == "*"    = Mul : prob1_helper(xs)
   | x == "/"    = IntDiv : prob1_helper(xs)
-  | otherwise  = (Val (read x :: Int)) : prob1_helper(xs)
+  | otherwise   = (Val (read x :: Int)) : prob1_helper(xs)
 
 -- Function prob2
 -- @type    prob2 :: PExp -> Int
@@ -89,19 +89,25 @@ test_probs = do
   test_prob3
   test_prob4
 
+-- got some tests from a wikipedia article https://en.wikipedia.org/wiki/Reverse_Polish_notation#Example
+  
 test_prob1 :: IO()
 test_prob1 = hspec $ do
   describe "prob1(parser)" $ do
     context "when provided with invalid input" $ do
       it "returns a PExp" $ do
         prob1 "200 + - * /" `shouldBe` [Val 200, Plus, Minus, Mul, IntDiv]
-        
+      it "returns a PExp" $ do
+        prob1 "15 7 1 1 + − ÷ 3 × 2 1 1 + + −" `shouldBe` [Val 15, Val 7, Val 1, Val 1, Plus, Minus, IntDiv, Val 3, Mul, Val 2, Val 1, Val 1, Plus, Plus, Minus]
+
 test_prob2 :: IO()
 test_prob2 = hspec $ do
   describe "prob2(evaluation)" $ do
     context "when provided with valid input" $ do
-      it "returns a Int" $ do
+      it "returns an Int" $ do
         prob2 [Val 4, Val 2, IntDiv] `shouldBe` 2
+      it "returns an Int" $ do
+        prob2 [Val 15, Val 7, Val 1, Val 1, Plus, Minus, IntDiv, Val 3, Mul, Val 2, Val 1, Val 1, Plus, Plus, Minus] `shouldBe` 5
     context "when provided with syntactically incorrect input" $ do
       it "throws an error" $ do
         evaluate (prob2 [Mul]) `shouldThrow` errorCall "Bad Input."
@@ -113,8 +119,10 @@ test_prob3 :: IO()
 test_prob3 = hspec $ do
   describe "prob3(evaluation)" $ do
     context "when provided with valid input" $ do
-      it "returns a Int" $ do
+      it "returns an Int" $ do
         prob3 [Val 4, Val 2, IntDiv] `shouldBe` Success 2
+      it "returns an Int" $ do
+        prob3 [Val 15, Val 7, Val 1, Val 1, Plus, Minus, IntDiv, Val 3, Mul, Val 2, Val 1, Val 1, Plus, Plus, Minus] `shouldBe` Success 5
     context "when provided with syntactically incorrect input" $ do
       it "throws an error" $ do
         prob3 [IntDiv, Plus, Val 0] `shouldBe` Failure BadSyntax
@@ -132,6 +140,8 @@ test_prob4 = undefined hspec $ do
         prob4 [Val 2, Val 4, Plus, Val 3, IntDiv] `shouldBe` Success "((2 + 4) / 3)"
       it "returns an infix string." $ do
         prob4 [Val 2] `shouldBe` Success "2"
+      it "returns an infix string." $ do
+        prob4 [Val 15, Val 7, Val 1, Val 1, Plus, Minus, IntDiv, Val 3, Mul, Val 2, Val 1, Val 1, Plus, Plus, Minus] `shouldBe` Success "((15 ÷ (7 − (1 + 1))) × 3) − (2 + (1 + 1))"
     context "When provided with an invalid expression" $ do
       it "returns Failure" $ do
         prob4 [Plus] `shouldBe` Failure "Bad Input."

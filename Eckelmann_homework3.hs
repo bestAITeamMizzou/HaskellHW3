@@ -10,15 +10,73 @@ import RPNAST
 
 --words prelude function breaks a string up by spaces
 --tokenizing is "lexing"
-prob1    :: String -> PExp
-prob1    = undefined
 
+-- Function prob1
+-- @type    prob1 :: String -> PExp
+-- @param   
+-- @output  
+-- @description: 
+prob1   :: String -> PExp
+prob1 x = (prob1_helper(words(x)))
+
+prob1_helper :: [String] -> [Op]
+prob1_helper [] = []
+prob1_helper (x:xs)
+  | x == "+"    = Plus : prob1_helper(xs)
+  | x == "-"    = Minus : prob1_helper(xs)
+  | x == "*"    = Mul : prob1_helper(xs)
+  | x == "/"    = IntDiv : prob1_helper(xs)
+  | otherwise  = (Val (read x :: Int)) : prob1_helper(xs)
+
+-- Function prob2
+-- @type    prob2 :: PExp -> Int
+-- @param   
+-- @output  
+-- @description: 
 prob2    :: PExp -> Int
-prob2    = undefined
+prob2 x
+  | length x < 3 = error("Bad Input.")
+prob2 x = prob2_helper [] x
 
-prob3    :: PExp -> Result String Int
-prob3    = undefined
+prob2_helper :: [Int] -> PExp -> Int
+prob2_helper (y:[]) []            = y
+prob2_helper _ []                 = error("Bad Input.")
+prob2_helper y ((Val x):xs)       = prob2_helper (x : y) xs
+prob2_helper (y:z:zs) (Plus:xs)   = prob2_helper ((z + y):zs) xs
+prob2_helper (y:z:zs) (Minus:xs)  = prob2_helper ((z - y):zs) xs
+prob2_helper (y:z:zs) (Mul:xs)    = prob2_helper ((z * y):zs) xs
+prob2_helper (y:z:zs) (IntDiv:xs)
+  | y == 0    = error("Cannot divide by zero!")
+  | otherwise = prob2_helper ((z `div` y):zs) xs
+prob2_helper _ _                  = error("Bad Input.")
 
+-- Function prob3
+-- @type    prob3 :: PExp -> RPNResult
+-- @param   
+-- @output  
+-- @description: 
+prob3    :: PExp -> RPNResult
+prob3 x
+  | length x < 3 = Failure BadSyntax
+prob3 x = prob3_helper [] x
+
+prob3_helper :: [Int] -> PExp -> Result RPNError Int
+prob3_helper (y:[]) []            = Success y
+prob3_helper _ []                 = Failure BadSyntax
+prob3_helper y ((Val x):xs)       = prob3_helper (x : y) xs
+prob3_helper (y:z:zs) (Plus:xs)   = prob3_helper ((z + y):zs) xs
+prob3_helper (y:z:zs) (Minus:xs)  = prob3_helper ((z - y):zs) xs
+prob3_helper (y:z:zs) (Mul:xs)    = prob3_helper ((z * y):zs) xs
+prob3_helper (y:z:zs) (IntDiv:xs)
+  | y == 0    = Failure DivByZero
+  | otherwise = prob3_helper ((z `div` y):zs) xs
+prob3_helper _ _                  = Failure BadSyntax
+
+-- Function prob4
+-- @type    prob4 :: PExp -> Result String String
+-- @param   
+-- @output  
+-- @description: 
 prob4    :: PExp -> Result String String
 prob4    = undefined
 
@@ -37,32 +95,32 @@ test_prob1 = hspec $ do
     context "when provided with invalid input" $ do
       it "returns a PExp" $ do
         prob1 "200 + - * /" `shouldBe` [Val 200, Plus, Minus, Mul, IntDiv]
-
+        
 test_prob2 :: IO()
 test_prob2 = hspec $ do
   describe "prob2(evaluation)" $ do
     context "when provided with valid input" $ do
       it "returns a Int" $ do
         prob2 [Val 4, Val 2, IntDiv] `shouldBe` 2
-   context "when provided with syntactically incorrect input" $ do
+    context "when provided with syntactically incorrect input" $ do
       it "throws an error" $ do
-        prob2 [Mul] `shouldThrow` errorCall "Bad Input."
+        evaluate (prob2 [Mul]) `shouldThrow` errorCall "Bad Input."
     context "when provided with an expression that tries to divide by 0" $ do
       it "throws an error" $ do
-        prob2 [Val 4, Val 0, IntDiv] `shouldThrow` errorCall "Cannot divide by zero!"
-		
+        evaluate(prob2 [Val 4, Val 0, IntDiv]) `shouldThrow` errorCall "Cannot divide by zero!"
+        
 test_prob3 :: IO()
 test_prob3 = hspec $ do
-  describe "prob2(evaluation)" $ do
+  describe "prob3(evaluation)" $ do
     context "when provided with valid input" $ do
       it "returns a Int" $ do
         prob3 [Val 4, Val 2, IntDiv] `shouldBe` Success 2
     context "when provided with syntactically incorrect input" $ do
       it "throws an error" $ do
-        prob3 [Mul] `shouldBe` Failure "Bad Input."
-    context "when provided with syntactically incorrect input" $ do
+        prob3 [IntDiv, Plus, Val 0] `shouldBe` Failure BadSyntax
+    context "when provided with an expression that tries to divide by 0" $ do
       it "throws an error" $ do
-        prob3 [Mul] `shouldBe` Failure "Cannot divide by zero!"
+        prob3 [Val 5, Val 0, IntDiv] `shouldBe` Failure DivByZero
         
 test_prob4 :: IO()
 test_prob4 = undefined hspec $ do

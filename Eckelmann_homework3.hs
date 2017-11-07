@@ -117,7 +117,7 @@ test_prob2 = hspec $ do
         
 test_prob3 :: IO()
 test_prob3 = hspec $ do
-  describe "prob2(evaluation)" $ do
+  describe "prob3(evaluation)" $ do
     context "when provided with valid input" $ do
       it "returns a Int" $ do
         prob3 [Val 4, Val 2, IntDiv] `shouldBe` Success 2

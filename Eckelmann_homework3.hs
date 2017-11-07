@@ -98,7 +98,9 @@ test_prob1 = hspec $ do
       it "returns a PExp" $ do
         prob1 "200 + - * /" `shouldBe` [Val 200, Plus, Minus, Mul, IntDiv]
       it "returns a PExp" $ do
-        prob1 "15 7 1 1 + − ÷ 3 × 2 1 1 + + −" `shouldBe` [Val 15, Val 7, Val 1, Val 1, Plus, Minus, IntDiv, Val 3, Mul, Val 2, Val 1, Val 1, Plus, Plus, Minus]
+        prob1 "15 7 1 1 + - / 3 * 2 1 1 + + -" `shouldBe` [Val 15, Val 7, Val 1, Val 1, Plus, Minus, IntDiv, Val 3, Mul, Val 2, Val 1, Val 1, Plus, Plus, Minus]
+        --prob1 "15 7 1 1 + − ÷ 3 × 2 1 1 + + −" `shouldBe` [Val 15, Val 7, Val 1, Val 1, Plus, Minus, IntDiv, Val 3, Mul, Val 2, Val 1, Val 1, Plus, Plus, Minus]
+
 
 test_prob2 :: IO()
 test_prob2 = hspec $ do

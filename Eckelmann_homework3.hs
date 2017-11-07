@@ -1,11 +1,5 @@
 {-# OPTIONS_GHC -fwarn-missing-signatures #-}
 {-# OPTIONS_GHC -fno-warn-tabs #-}
---{-# LANGUAGE DeriveFoldable #-}
---{-# LANGUAGE DeriveFunctor #-}
---{-# LANGUAGE DeriveTraversable #-}
---{-# LANGUAGE FlexibleInstances #-}
---{-# LANGUAGE GeneralizedNewtypeDeriving #-}
---{-# LANGUAGE LambdaCase #-}
 
 module Homework3 where
 

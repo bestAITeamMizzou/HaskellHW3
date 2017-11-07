@@ -17,7 +17,21 @@ import RPNAST
 --words prelude function breaks a string up by spaces
 --tokenizing is "lexing"
 prob1    :: String -> PExp
-prob1    = undefined
+prob1 x =  (prob1_helper(words(x)))
+
+prob1_helper :: [String] -> [Op]
+prob1_helper (x:[])
+  | x == "+"    = Plus : []
+  | x == "-"    = Minus : []
+  | x == "*"    = Mul : []
+  | x == "/"    = IntDiv : []
+  | otherwise  = (Val (read x :: Int)) : []
+prob1_helper (x:xs)
+  | x == "+"    = Plus : prob1_helper(xs)
+  | x == "-"    = Minus : prob1_helper(xs)
+  | x == "*"    = Mul : prob1_helper(xs)
+  | x == "/"    = IntDiv : prob1_helper(xs)
+  | otherwise  = (Val (read x :: Int)) : prob1_helper(xs)
 
 prob2    :: PExp -> Int
 prob2    = undefined

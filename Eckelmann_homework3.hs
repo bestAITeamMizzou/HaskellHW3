@@ -34,8 +34,6 @@ prob1_helper (x:xs)
 -- @output  
 -- @description: 
 prob2    :: PExp -> Int
-prob2 x
-  | length x < 3 = error("Bad Input.")
 prob2 x = prob2_helper [] x
 
 prob2_helper :: [Int] -> PExp -> Int
@@ -56,8 +54,6 @@ prob2_helper _ _                  = error("Bad Input.")
 -- @output  
 -- @description: 
 prob3    :: PExp -> RPNResult
-prob3 x
-  | length x < 3 = Failure BadSyntax
 prob3 x = prob3_helper [] x
 
 prob3_helper :: [Int] -> PExp -> Result RPNError Int

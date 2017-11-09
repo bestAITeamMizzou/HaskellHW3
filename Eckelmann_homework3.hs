@@ -38,7 +38,7 @@ prob2 x = prob2_helper [] x
 
 prob2_helper :: [Int] -> PExp -> Int
 prob2_helper (y:[]) []            = y
-prob2_helper _ []                 = error("Bad Input.")
+--prob2_helper _ []                 = error("Bad Input.")
 prob2_helper y ((Val x):xs)       = prob2_helper (x : y) xs
 prob2_helper (y:z:zs) (Plus:xs)   = prob2_helper ((z + y):zs) xs
 prob2_helper (y:z:zs) (Minus:xs)  = prob2_helper ((z - y):zs) xs
@@ -56,9 +56,9 @@ prob2_helper _ _                  = error("Bad Input.")
 prob3    :: PExp -> RPNResult
 prob3 x = prob3_helper [] x
 
-prob3_helper :: [Int] -> PExp -> Result RPNError Int
+prob3_helper :: [Int] -> PExp -> RPNResult
 prob3_helper (y:[]) []            = Success y
-prob3_helper _ []                 = Failure BadSyntax
+--prob3_helper _ []                 = Failure BadSyntax
 prob3_helper y ((Val x):xs)       = prob3_helper (x : y) xs
 prob3_helper (y:z:zs) (Plus:xs)   = prob3_helper ((z + y):zs) xs
 prob3_helper (y:z:zs) (Minus:xs)  = prob3_helper ((z - y):zs) xs
@@ -74,7 +74,16 @@ prob3_helper _ _                  = Failure BadSyntax
 -- @output  
 -- @description: 
 prob4    :: PExp -> Result String String
-prob4    = undefined
+prob4 x = prob4_helper [] x
+
+prob4_helper :: [String] -> PExp -> Result String String
+prob4_helper (y:[]) []            = Success y
+prob4_helper y ((Val x):xs)       = prob4_helper ((show x ): y) xs
+prob4_helper (y:z:zs) (Plus:xs)   = prob4_helper (("(" ++ z ++ " + " ++ y ++ ")"):zs) xs
+prob4_helper (y:z:zs) (Minus:xs)  = prob4_helper (("(" ++ z ++ " - " ++ y ++ ")"):zs) xs
+prob4_helper (y:z:zs) (Mul:xs)    = prob4_helper (("(" ++ z ++ " * " ++ y ++ ")"):zs) xs
+prob4_helper (y:z:zs) (IntDiv:xs) = prob4_helper (("(" ++ z ++ " / " ++ y ++ ")"):zs) xs
+prob4_helper _ _                  = Failure "Bad Input."
 
 -- Write your Hspec Tests below
 
@@ -129,7 +138,7 @@ test_prob3 = hspec $ do
         prob3 [Val 5, Val 0, IntDiv] `shouldBe` Failure DivByZero
         
 test_prob4 :: IO()
-test_prob4 = undefined hspec $ do
+test_prob4 = hspec $ do
   describe "prob4(infix converter)" $ do
     context "When provided with valid input" $ do
       it "returns an infix string." $ do
@@ -139,7 +148,8 @@ test_prob4 = undefined hspec $ do
       it "returns an infix string." $ do
         prob4 [Val 2] `shouldBe` Success "2"
       it "returns an infix string." $ do
-        prob4 [Val 15, Val 7, Val 1, Val 1, Plus, Minus, IntDiv, Val 3, Mul, Val 2, Val 1, Val 1, Plus, Plus, Minus] `shouldBe` Success "((15 ÷ (7 − (1 + 1))) × 3) − (2 + (1 + 1))"
+        prob4 [Val 15, Val 7, Val 1, Val 1, Plus, Minus, IntDiv, Val 3, Mul, Val 2, Val 1, Val 1, Plus, Plus, Minus] `shouldBe` Success "(((15 / (7 - (1 + 1))) * 3) - (2 + (1 + 1)))"
+        --prob4 [Val 15, Val 7, Val 1, Val 1, Plus, Minus, IntDiv, Val 3, Mul, Val 2, Val 1, Val 1, Plus, Plus, Minus] `shouldBe` Success "((15 ÷ (7 − (1 + 1))) × 3) − (2 + (1 + 1))"
     context "When provided with an invalid expression" $ do
       it "returns Failure" $ do
         prob4 [Plus] `shouldBe` Failure "Bad Input."

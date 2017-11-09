@@ -99,7 +99,7 @@ test_probs = do
 test_prob1 :: IO()
 test_prob1 = hspec $ do
   describe "prob1(parser)" $ do
-    context "when provided with invalid input" $ do
+    context "when provided with valid input" $ do
       it "returns a PExp" $ do
         prob1 "200 + - * /" `shouldBe` [Val 200, Plus, Minus, Mul, IntDiv]
       it "returns a PExp" $ do
